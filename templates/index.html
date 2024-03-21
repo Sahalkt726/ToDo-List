@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 40px;
+        }
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        li {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        li:hover {
+            background-color: #f0f0f0;
+        }
+        li a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 10px;
+        }
+        li a:hover {
+            text-decoration: underline;
+        }
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <form action="{% url 'add_task' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Add a task...">
+        <button type="submit">Add Task</button>
+    </form>
+    <ul>
+        {% for task in tasks %}
+            <li{% if task.completed %} style="text-decoration: line-through;"{% endif %}>
+                {{ task.title }}
+                {% if not task.completed %}
+                    <a href="{% url 'complete_task' task.id %}">Complete</a>
+                {% endif %}
+                <a href="{% url 'delete_task' task.id %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
